@@ -20,16 +20,17 @@ func NewPersonHandler(useCase entity.PersonUseCase) *PersonHandler {
 	}
 }
 
-// Create @Summary Create person
-// @Description Create a new person with enriched data
-// @Tags persons
-// @Accept json
-// @Produce json
-// @Param request body dto.CreatePersonRequest true "Person data"
-// @Success 201 {object} dto.PersonResponse
-// @Failure 400 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
-// @Router /api/v1/persons [post]
+// Create godoc
+// @Summary      Create person
+// @Description  Create a new person with enriched data
+// @Tags         persons
+// @Accept       json
+// @Produce      json
+// @Param        request  body      dto.CreatePersonRequest  true  "Person data"
+// @Success      201      {object}  dto.PersonResponse
+// @Failure      400      {object}  dto.ErrorResponse
+// @Failure      500      {object}  dto.ErrorResponse
+// @Router       /api/v1/persons [post]
 func (h *PersonHandler) Create(c *gin.Context) {
 	var req dto.CreatePersonRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -46,15 +47,17 @@ func (h *PersonHandler) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, toPersonResponse(person))
 }
 
-// GetByID @Summary Get person by ID
-// @Description Get a person by ID
-// @Tags persons
-// @Produce json
-// @Param id path int true "Person ID"
-// @Success 200 {object} dto.PersonResponse
-// @Failure 404 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
-// @Router /api/v1/persons/{id} [get]
+// GetByID godoc
+// @Summary      Get person by ID
+// @Description  Get a person by ID
+// @Tags         persons
+// @Produce      json
+// @Param        id   path      int  true  "Person ID"
+// @Success      200  {object}  dto.PersonResponse
+// @Failure      400  {object}  dto.ErrorResponse
+// @Failure      404  {object}  dto.ErrorResponse
+// @Failure      500  {object}  dto.ErrorResponse
+// @Router       /api/v1/persons/{id} [get]
 func (h *PersonHandler) GetByID(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -71,18 +74,19 @@ func (h *PersonHandler) GetByID(c *gin.Context) {
 	c.JSON(http.StatusOK, toPersonResponse(person))
 }
 
-// GetAll @Summary Get all persons
-// @Description Get all persons with optional filtering and pagination
-// @Tags persons
-// @Produce json
-// @Param page query int false "Page number"
-// @Param limit query int false "Items per page"
-// @Param name query string false "Filter by name"
-// @Param surname query string false "Filter by surname"
-// @Param nationality query string false "Filter by nationality"
-// @Success 200 {object} dto.PersonListResponse
-// @Failure 500 {object} map[string]interface{}
-// @Router /api/v1/persons [get]
+// GetAll godoc
+// @Summary      Get all persons
+// @Description  Get all persons with optional filtering and pagination
+// @Tags         persons
+// @Produce      json
+// @Param        page        query     int     false  "Page number"
+// @Param        limit       query     int     false  "Items per page"
+// @Param        name        query     string  false  "Filter by name"
+// @Param        surname     query     string  false  "Filter by surname"
+// @Param        nationality query     string  false  "Filter by nationality"
+// @Success      200         {object}  dto.PersonListResponse
+// @Failure      500         {object}  dto.ErrorResponse
+// @Router       /api/v1/persons [get]
 func (h *PersonHandler) GetAll(c *gin.Context) {
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
@@ -112,18 +116,19 @@ func (h *PersonHandler) GetAll(c *gin.Context) {
 	})
 }
 
-// Update @Summary Update person
-// @Description Update an existing person
-// @Tags persons
-// @Accept json
-// @Produce json
-// @Param id path int true "Person ID"
-// @Param request body dto.UpdatePersonRequest true "Person data"
-// @Success 200 {object} dto.PersonResponse
-// @Failure 400 {object} map[string]interface{}
-// @Failure 404 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
-// @Router /api/v1/persons/{id} [put]
+// Update godoc
+// @Summary      Update person
+// @Description  Update an existing person
+// @Tags         persons
+// @Accept       json
+// @Produce      json
+// @Param        id      path      int                     true  "Person ID"
+// @Param        request body      dto.UpdatePersonRequest true  "Person data"
+// @Success      200     {object}  dto.PersonResponse
+// @Failure      400     {object}  dto.ErrorResponse
+// @Failure      404     {object}  dto.ErrorResponse
+// @Failure      500     {object}  dto.ErrorResponse
+// @Router       /api/v1/persons/{id} [put]
 func (h *PersonHandler) Update(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -170,15 +175,16 @@ func (h *PersonHandler) Update(c *gin.Context) {
 	c.JSON(http.StatusOK, toPersonResponse(person))
 }
 
-// Delete @Summary Delete person
-// @Description Delete a person by ID
-// @Tags persons
-// @Param id path int true "Person ID"
-// @Success 204 "No Content"
-// @Failure 400 {object} map[string]interface{}
-// @Failure 404 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
-// @Router /api/v1/persons/{id} [delete]
+// Delete godoc
+// @Summary      Delete person
+// @Description  Delete a person by ID
+// @Tags         persons
+// @Param        id   path      int  true  "Person ID"
+// @Success      204  "No Content"
+// @Failure      400  {object}  dto.ErrorResponse
+// @Failure      404  {object}  dto.ErrorResponse
+// @Failure      500  {object}  dto.ErrorResponse
+// @Router       /api/v1/persons/{id} [delete]
 func (h *PersonHandler) Delete(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
