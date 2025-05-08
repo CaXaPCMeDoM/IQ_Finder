@@ -1,0 +1,54 @@
+services:
+  app:
+    build: .
+    command: sh -c "sleep 10 && ./migrate-service && ./name_iq_finder"
+    ports:
+      - "${HTTP_PORT:-8080}:${HTTP_PORT:-8080}"
+    environment:
+      # HTTP
+      - SERVER_PORT=${SERVER_PORT}
+
+      # DB
+      - DB_URL=${DB_URL}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_SSLMODE=${DB_SSLMODE}
+
+      # logger
+      - LOG_LEVEL=${LOG_LEVEL}
+    depends_on:
+      name_iq_finder-postgres:
+        condition: service_healthy
+    networks:
+      - backend
+
+  name_iq_finder-postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_HOST_AUTH_METHOD: md5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "PGPASSWORD=$${POSTGRES_PASSWORD} pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"
+      ]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 30s
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  pgdata:
